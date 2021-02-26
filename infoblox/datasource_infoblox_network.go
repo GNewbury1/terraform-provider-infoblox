@@ -2,8 +2,9 @@ package infoblox
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/infobloxopen/infoblox-go-client"
+	ibclient "github.com/infobloxopen/infoblox-go-client"
 )
 
 func dataSourceNetwork() *schema.Resource {
@@ -31,6 +32,11 @@ func dataSourceNetwork() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"extensible_attributes": &schema.Schema{
+				Type:        schema.TypeMap,
+				Computed:    true,
+				Description: "Extensible Attributes for the network",
+			},
 		},
 	}
 }
@@ -56,5 +62,6 @@ func dataSourceNetworkRead(d *schema.ResourceData, m interface{}) error {
 	if obj.Ea["Network Name"] != nil {
 		d.Set("network_name", obj.Ea["Network Name"])
 	}
+	d.Set("extensible_attributes", obj.Ea)
 	return nil
 }
